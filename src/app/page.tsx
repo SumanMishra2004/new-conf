@@ -1,69 +1,268 @@
-import Image from "next/image";
+import {
+  getHomePageData,
+  getSpeakers,
+  getCommitteeMembers,
+  getRegistrationCategories,
+  getSponsors,
+  getFaqs,
+  getContactInfo,
+  getSiteSettings,
+} from '@/lib/sanity/queries';
+import Navbar from '@/components/layout/Navbar';
+import Footer from '@/components/layout/Footer';
+import HeroSection from '@/components/sections/HeroSection';
+import AnnouncementSection from '@/components/sections/AnnouncementSection';
+import AboutSection from '@/components/sections/AboutSection';
+import TracksSection from '@/components/sections/TracksSection';
+import ImportantDatesSection from '@/components/sections/ImportantDatesSection';
+import KeynoteSpeakersSection from '@/components/sections/KeynoteSpeakersSection';
+import CommitteeSection from '@/components/sections/CommitteeSection';
+import RegistrationSection from '@/components/sections/RegistrationSection';
+import VenueSection from '@/components/sections/VenueSection';
+import SponsorsSection from '@/components/sections/SponsorsSection';
+import FaqSection from '@/components/sections/FaqSection';
+import ContactSection from '@/components/sections/ContactSection';
 
-export default function Home() {
+export default async function Home() {
+  const [
+    homeData,
+    speakers,
+    committeeMembers,
+    categories,
+    sponsors,
+    faqs,
+    contactInfo,
+    siteSettings,
+  ] = await Promise.all([
+    getHomePageData(),
+    getSpeakers(),
+    getCommitteeMembers(),
+    getRegistrationCategories(),
+    getSponsors(),
+    getFaqs(),
+    getContactInfo(),
+    getSiteSettings(),
+  ]);
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
+    <div className="min-h-screen bg-slate-50 font-sans text-slate-900 flex flex-col">
+      {/* Top Header Navbar */}
+      <Navbar settings={siteSettings} />
+
+      <main className="flex-1">
+        {/* Hero Section (Frontend Controlled) */}
+        <HeroSection />
+
+        {/* Announcement Section */}
+        <AnnouncementSection
+          enabled={homeData?.enableAnnouncement ?? true}
+          text={
+            homeData?.announcementText ||
+            'Paper submission deadline extended to 30 September 2026. Register early for author discounts!'
+          }
         />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
+
+        {/* About Section */}
+        <AboutSection
+          enabled={homeData?.enableAbout ?? true}
+          description={
+            homeData?.aboutDescription || [
+              {
+                _type: 'block',
+                children: [
+                  {
+                    _type: 'span',
+                    text: 'Welcome to ICST 2026! The International Conference on Sustainable Computing & Artificial Intelligence brings together global researchers, leading engineers, and domain experts to accelerate groundbreaking technological advancements.',
+                  },
+                ],
+              },
+            ]
+          }
+        />
+
+        {/* Tracks Section */}
+        <TracksSection
+          enabled={homeData?.enableTracks ?? true}
+          tracks={
+            homeData?.tracks || [
+              { description: 'Artificial Intelligence and Machine Learning Innovations' },
+              { description: 'Sustainable Computing, IoT & Green Data Centers' },
+              { description: 'Data Science, Cloud Computing & Big Analytics' },
+              { description: 'Cybersecurity, Cryptography & Network Resilience' },
+              { description: 'Quantum Computing and Advanced Algorithms' },
+            ]
+          }
+        />
+
+        {/* Important Dates Section */}
+        <ImportantDatesSection
+          enabled={homeData?.enableImportantDates ?? true}
+          importantDates={
+            homeData?.importantDates || [
+              {
+                title: 'Paper Submission',
+                subtitle: 'Full paper submission deadline',
+                date: '30 September 2026',
+              },
+              {
+                title: 'Acceptance Notification',
+                subtitle: 'Review result notification to authors',
+                date: '15 October 2026',
+              },
+              {
+                title: 'Camera Ready Paper',
+                subtitle: 'Final paper upload & registration',
+                date: '30 October 2026',
+              },
+              {
+                title: 'Conference Event',
+                subtitle: 'Official conference dates',
+                date: '15-17 November 2026',
+              },
+            ]
+          }
+        />
+
+        {/* Keynote Speakers Section */}
+        <KeynoteSpeakersSection
+          speakers={
+            speakers.length > 0
+              ? speakers
+              : [
+                  {
+                    _id: 'demo-1',
+                    name: 'Dr. Elena Rostova',
+                    designation: 'Professor of AI Architecture',
+                    organization: 'Stanford Tech Institute',
+                  },
+                  {
+                    _id: 'demo-2',
+                    name: 'Prof. Marcus Vance',
+                    designation: 'Director of Quantum Research',
+                    organization: 'MIT Innovation Lab',
+                  },
+                  {
+                    _id: 'demo-3',
+                    name: 'Sarah Jenkins',
+                    designation: 'Head of Sustainable Systems',
+                    organization: 'Global Energy Tech',
+                  },
+                ]
+          }
+        />
+
+        {/* Committee Section */}
+        <CommitteeSection
+          committeeMembers={
+            committeeMembers.length > 0
+              ? committeeMembers
+              : [
+                  {
+                    _id: 'c-1',
+                    name: 'Prof. Arthur Pendelton',
+                    role: 'Chief Patron',
+                    organization: 'Vice Chancellor, University Tech',
+                  },
+                  {
+                    _id: 'c-2',
+                    name: 'Dr. Maria Santos',
+                    role: 'General Chair',
+                    organization: 'Department of Computer Science',
+                  },
+                  {
+                    _id: 'c-3',
+                    name: 'Dr. Rajiv Kumar',
+                    role: 'Conference Chair',
+                    organization: 'IEEE Senior Member',
+                  },
+                ]
+          }
+        />
+
+        {/* Registration Section */}
+        <RegistrationSection
+          enabled={homeData?.enableRegistration ?? true}
+          googleFormUrl={homeData?.googleFormUrl || 'https://forms.google.com'}
+          categories={
+            categories.length > 0
+              ? categories
+              : [
+                  { _id: 'cat-1', name: 'Student / Scholar', fee: '$150 / ₹3,000' },
+                  { _id: 'cat-2', name: 'Faculty / Academician', fee: '$250 / ₹5,000' },
+                  { _id: 'cat-3', name: 'Industry Delegate', fee: '$350 / ₹7,500' },
+                  { _id: 'cat-4', name: 'International Participant', fee: '$400' },
+                ]
+          }
+        />
+
+        {/* Venue Section */}
+        <VenueSection
+          enabled={homeData?.enableVenue ?? true}
+          name={homeData?.venueName || 'Grand International Convention Center'}
+          address={
+            homeData?.venueAddress ||
+            '100 Tech Boulevard, Innovation District, Silicon Valley, CA 94025'
+          }
+          iframeHtml={
+            homeData?.googleMapsIframe ||
+            '<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3168.647313880496!2d-122.08385108469248!3d37.421999979825215!2m3!1f0!0!f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x808fba02425dad8f%3A0x6c296c66619367e0!2sGoogleplex!5e0!3m2!1sen!2sus!4v1614123456789!5m2!1sen!2sus" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe>'
+          }
+        />
+
+        {/* Sponsors Section */}
+        <SponsorsSection
+          sponsors={
+            sponsors.length > 0
+              ? sponsors
+              : [
+                  { _id: 's-1', name: 'TechGlobal', logo: null, category: 'Platinum' },
+                  { _id: 's-2', name: 'AI Research Lab', logo: null, category: 'Gold' },
+                  { _id: 's-3', name: 'CloudScale', logo: null, category: 'Silver' },
+                ]
+          }
+        />
+
+        {/* FAQ Section */}
+        <FaqSection
+          faqs={
+            faqs.length > 0
+              ? faqs
+              : [
+                  {
+                    _id: 'f-1',
+                    question: 'How do I submit my full paper?',
+                    answer:
+                      'Papers can be submitted through our Microsoft CMT portal before the 30th September 2026 deadline.',
+                  },
+                  {
+                    _id: 'f-2',
+                    question: 'Will accepted papers be published in indexed journals?',
+                    answer:
+                      'Yes, selected high-quality accepted papers will be published in Scopus/WoS indexed conference proceedings.',
+                  },
+                  {
+                    _id: 'f-3',
+                    question: 'Can I participate virtually?',
+                    answer:
+                      'Yes, ICST 2026 is a hybrid conference supporting both physical on-site and remote online presentations.',
+                  },
+                ]
+          }
+        />
+
+        {/* Contact Section */}
+        <ContactSection
+          contactInfo={
+            contactInfo || {
+              emails: ['secretariat@icst2026.org', 'queries@icst2026.org'],
+              phoneNumbers: ['+1 (555) 019-2834', '+1 (555) 019-5678'],
+            }
+          }
+        />
       </main>
+
+      {/* Footer */}
+      <Footer settings={siteSettings} contactInfo={contactInfo} />
     </div>
   );
 }
