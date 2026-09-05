@@ -50,8 +50,22 @@ export default async function Home() {
       <Navbar settings={siteSettings} />
 
       <main className="flex-1">
-        {/* Hero Section (Frontend Controlled) */}
-        <HeroSection />
+        {/* Hero Section */}
+        <HeroSection
+          badgeText={homeData?.heroBadgeText}
+          titleLine1={homeData?.heroTitleLine1}
+          titleLine2={homeData?.heroTitleLine2}
+          titleLine3={homeData?.heroTitleLine3}
+          acronym={homeData?.heroAcronym}
+          description={homeData?.heroDescription}
+          eventDate={homeData?.heroEventDate}
+          eventMode={homeData?.heroEventMode}
+          primaryButtonText={homeData?.heroPrimaryButtonText}
+          primaryButtonLink={homeData?.heroPrimaryButtonLink}
+          secondaryButtonText={homeData?.heroSecondaryButtonText}
+          secondaryButtonLink={homeData?.heroSecondaryButtonLink}
+          subjectAreas={homeData?.heroSubjectAreas}
+        />
 
         {/* Announcement Section */}
         <AnnouncementSection

@@ -1,6 +1,22 @@
 import { client } from '@/sanity/lib/client';
 
 export interface HomePageData {
+  // Hero
+  enableHero?: boolean;
+  heroBadgeText?: string;
+  heroTitleLine1?: string;
+  heroTitleLine2?: string;
+  heroTitleLine3?: string;
+  heroAcronym?: string;
+  heroDescription?: string;
+  heroEventDate?: string;
+  heroEventMode?: string;
+  heroPrimaryButtonText?: string;
+  heroPrimaryButtonLink?: string;
+  heroSecondaryButtonText?: string;
+  heroSecondaryButtonLink?: string;
+  heroSubjectAreas?: string[];
+  // Announcement
   enableAnnouncement?: boolean;
   announcementText?: string;
   enableAbout?: boolean;

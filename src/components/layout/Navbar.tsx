@@ -2,8 +2,9 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Menu, X, GraduationCap } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
 import { SiteSettingsData } from '@/lib/sanity/queries';
+import Image from 'next/image';
 
 interface NavbarProps {
   settings?: SiteSettingsData | null;
@@ -17,9 +18,15 @@ export default function Navbar({ settings }: NavbarProps) {
   const showPublications = settings?.showPublicationsInNavbar ?? true;
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 12);
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 12);
+    };
+
     window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
   }, []);
 
   const navLinks = [
@@ -31,7 +38,9 @@ export default function Navbar({ settings }: NavbarProps) {
     { name: 'Committee', href: '/#committee' },
     { name: 'Registration', href: '/#registration' },
     ...(showGallery ? [{ name: 'Gallery', href: '/gallery' }] : []),
-    ...(showPublications ? [{ name: 'Publications', href: '/publications' }] : []),
+    ...(showPublications
+      ? [{ name: 'Publications', href: '/publications' }]
+      : []),
     { name: 'Contact', href: '/#contact' },
   ];
 
@@ -39,41 +48,46 @@ export default function Navbar({ settings }: NavbarProps) {
     <header
       className={`sticky top-0 z-50 transition-all duration-300 ${
         scrolled
-          ? 'bg-white/95 backdrop-blur-md shadow-md shadow-slate-200/80 border-b border-slate-200'
+          ? 'bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-sm'
           : 'bg-white border-b border-slate-100'
       }`}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="flex h-20 items-center justify-between">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2.5 group">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-600 flex items-center justify-center shadow-md shadow-blue-200 group-hover:scale-105 transition-transform duration-200">
-              <GraduationCap className="w-5 h-5 text-white" />
-            </div>
-            <div className="flex flex-col leading-tight">
-              <span className="font-bold text-[17px] tracking-tight text-slate-900 group-hover:text-blue-700 transition-colors">
-                ICST 2026
-              </span>
-              <span className="text-[10px] text-slate-400 font-medium tracking-wider uppercase">
-                International Conference
-              </span>
+          <Link
+            href="/"
+            className="flex items-center shrink-0"
+            aria-label="Home"
+          >
+            <div className="flex h-14 w-14 items-center justify-center overflow-hidden rounded-xl bg-white transition-transform duration-200 hover:scale-105">
+              <Image
+                src="/icon.jpeg"
+                width={300}
+                height={300}
+                alt="Logo"
+                className="h-full w-full object-contain"
+                priority
+              />
             </div>
           </Link>
 
-          {/* Desktop Links */}
-          <nav className="hidden lg:flex items-center space-x-0.5">
+          {/* Desktop Navigation */}
+          <nav className="hidden lg:flex items-center gap-1">
             {navLinks.map((link) => (
               <Link
                 key={link.name}
                 href={link.href}
-                className="px-3 py-2 rounded-lg text-sm font-medium text-slate-600 hover:text-blue-700 hover:bg-blue-50 transition-all duration-150"
+                className="rounded-lg px-3 py-2 text-sm font-medium text-slate-700 transition-all duration-150 hover:bg-slate-100 hover:text-blue-600"
               >
                 {link.name}
               </Link>
             ))}
+
+            {/* Register Button */}
             <Link
               href="/#registration"
-              className="ml-3 px-5 py-2 text-sm font-semibold rounded-lg bg-blue-600 hover:bg-blue-700 text-white shadow-sm shadow-blue-200 transition-all duration-150 active:scale-95"
+              className="ml-3 rounded-lg bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm shadow-blue-200 transition-all duration-150 hover:bg-blue-700 hover:shadow-md active:scale-95"
             >
               Register Now
             </Link>
@@ -84,40 +98,47 @@ export default function Navbar({ settings }: NavbarProps) {
             <button
               onClick={() => setIsOpen(!isOpen)}
               type="button"
-              className="p-2 rounded-lg text-slate-500 hover:text-slate-800 hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="rounded-lg p-2 text-slate-700 transition-colors hover:bg-slate-100 hover:text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
               aria-controls="mobile-menu"
               aria-expanded={isOpen}
+              aria-label={isOpen ? 'Close main menu' : 'Open main menu'}
             >
-              <span className="sr-only">Open main menu</span>
-              {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+              {isOpen ? (
+                <X className="h-6 w-6" />
+              ) : (
+                <Menu className="h-6 w-6" />
+              )}
             </button>
           </div>
         </div>
       </div>
 
-      {/* Mobile Drawer */}
+      {/* Mobile Menu */}
       {isOpen && (
         <div
-          className="lg:hidden border-t border-slate-100 bg-white px-4 pt-2 pb-4 space-y-1 shadow-lg"
           id="mobile-menu"
+          className="border-t border-slate-200 bg-white px-4 pb-4 pt-3 shadow-lg lg:hidden"
         >
-          {navLinks.map((link) => (
+          <nav className="space-y-1">
+            {navLinks.map((link) => (
+              <Link
+                key={link.name}
+                href={link.href}
+                onClick={() => setIsOpen(false)}
+                className="block rounded-lg px-3 py-2.5 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-100 hover:text-blue-600"
+              >
+                {link.name}
+              </Link>
+            ))}
+
             <Link
-              key={link.name}
-              href={link.href}
+              href="/#registration"
               onClick={() => setIsOpen(false)}
-              className="block px-3 py-2.5 rounded-lg text-sm font-medium text-slate-700 hover:text-blue-700 hover:bg-blue-50 transition-colors"
+              className="mt-3 block w-full rounded-lg bg-blue-600 px-4 py-2.5 text-center text-sm font-semibold text-white shadow-sm transition-colors hover:bg-blue-700"
             >
-              {link.name}
+              Register Now
             </Link>
-          ))}
-          <Link
-            href="/#registration"
-            onClick={() => setIsOpen(false)}
-            className="block w-full text-center mt-2 px-4 py-2.5 text-sm font-semibold rounded-lg bg-blue-600 text-white hover:bg-blue-700 shadow-sm transition-colors"
-          >
-            Register Now
-          </Link>
+          </nav>
         </div>
       )}
     </header>
