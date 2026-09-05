@@ -1,0 +1,23 @@
+{
+  "name": "CBTS 2026 — International Conference on Chemical, Biological & Technological Sciences",
+  "short_name": "CBTS 2026",
+  "description": "A global platform bringing together researchers, scientists, and industry leaders to explore sustainable solutions across chemical, biological, and technological sciences.",
+  "icons": [
+    {
+      "src": "/web-app-manifest-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/web-app-manifest-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "theme_color": "#147d72",
+  "background_color": "#fafcfb",
+  "display": "standalone",
+  "start_url": "/"
+}
