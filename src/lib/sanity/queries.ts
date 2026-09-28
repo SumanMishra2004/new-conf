@@ -21,6 +21,9 @@ export interface HomePageData {
   announcementText?: string;
   enableAbout?: boolean;
   aboutDescription?: any;
+  aboutVision?: string;
+  aboutMissionPoints?: string[];
+  aboutClosingStatement?: string;
   enableTracks?: boolean;
   tracksSectionTitle?: string;
   tracksSectionSubtitle?: string;

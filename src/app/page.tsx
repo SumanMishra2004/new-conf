@@ -79,19 +79,10 @@ export default async function Home() {
         {/* About Section */}
         <AboutSection
           enabled={homeData?.enableAbout ?? true}
-          description={
-            homeData?.aboutDescription || [
-              {
-                _type: 'block',
-                children: [
-                  {
-                    _type: 'span',
-                    text: 'Welcome to ICST 2026! The International Conference on Sustainable Computing & Artificial Intelligence brings together global researchers, leading engineers, and domain experts to accelerate groundbreaking technological advancements.',
-                  },
-                ],
-              },
-            ]
-          }
+          description={homeData?.aboutDescription}
+          vision={homeData?.aboutVision}
+          missionPoints={homeData?.aboutMissionPoints}
+          closingStatement={homeData?.aboutClosingStatement}
         />
 
         {/* Tracks Section */}
