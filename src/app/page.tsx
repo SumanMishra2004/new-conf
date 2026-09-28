@@ -97,15 +97,10 @@ export default async function Home() {
         {/* Tracks Section */}
         <TracksSection
           enabled={homeData?.enableTracks ?? true}
-          tracks={
-            homeData?.tracks || [
-              { description: 'Artificial Intelligence and Machine Learning Innovations' },
-              { description: 'Sustainable Computing, IoT & Green Data Centers' },
-              { description: 'Data Science, Cloud Computing & Big Analytics' },
-              { description: 'Cybersecurity, Cryptography & Network Resilience' },
-              { description: 'Quantum Computing and Advanced Algorithms' },
-            ]
-          }
+          sectionTitle={homeData?.tracksSectionTitle}
+          sectionSubtitle={homeData?.tracksSectionSubtitle}
+          tracksImage={homeData?.tracksImage}
+          tracks={homeData?.tracks}
         />
 
         {/* Important Dates Section */}

@@ -22,7 +22,10 @@ export interface HomePageData {
   enableAbout?: boolean;
   aboutDescription?: any;
   enableTracks?: boolean;
-  tracks?: Array<{ _key?: string; description: string }>;
+  tracksSectionTitle?: string;
+  tracksSectionSubtitle?: string;
+  tracksImage?: { asset?: any; alt?: string; hotspot?: any; crop?: any };
+  tracks?: Array<{ _key?: string; title: string; subthemes?: string[] }>;
   enableImportantDates?: boolean;
   importantDates?: Array<{ _key?: string; title: string; subtitle: string; date: string }>;
   enableRegistration?: boolean;
