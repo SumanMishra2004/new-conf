@@ -9,6 +9,11 @@ import {
   getSiteSettings,
 } from '@/lib/sanity/queries';
 import Navbar from '@/components/layout/Navbar';
+
+// Revalidate this page at most every 60 seconds (ISR).
+// Sanity publishes → next visitor within 60 s sees the change,
+// no redeploy required.  The /api/revalidate webhook makes it instant.
+export const revalidate = 60;
 import Footer from '@/components/layout/Footer';
 import HeroSection from '@/components/sections/HeroSection';
 import AnnouncementSection from '@/components/sections/AnnouncementSection';
